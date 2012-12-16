@@ -46,7 +46,7 @@
 // 301 = Rambo
 
 #ifndef MOTHERBOARD
-#define MOTHERBOARD 7
+#define MOTHERBOARD 62
 #endif
 
 
@@ -75,10 +75,10 @@
 // 52 is 200k thermistor - ATC Semitec 204GT-2 (1k pullup)
 // 55 is 100k thermistor - ATC Semitec 104GT-2 (Used in ParCan) (1k pullup)
 
-#define TEMP_SENSOR_0 -1
+#define TEMP_SENSOR_0 101
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_BED 101
 
 // Actual temperature must be close to target for this long before M109 returns success
 #define TEMP_RESIDENCY_TIME 10	// (seconds)
@@ -117,13 +117,21 @@
                                   // is more then PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
   #define PID_INTEGRAL_DRIVE_MAX 255  //limit for the integral term
   #define K1 0.95 //smoothing factor withing the PID
-  #define PID_dT ((16.0 * 8.0)/(F_CPU / 64.0 / 256.0)) //sampling period of the temperature routine
+  #define PID_dT 0.32 //((16.0 * 8.0)/(F_CPU / 64.0 / 256.0)) //sampling period of the
 
 // If you are using a preconfigured hotend then you can use one of the value sets by uncommenting it
 // Ultimaker
-    #define  DEFAULT_Kp 22.2
-    #define  DEFAULT_Ki 1.08  
-    #define  DEFAULT_Kd 114  
+
+    //#define  DEFAULT_Kp 22.2
+    //#define  DEFAULT_Ki 1.08  
+    //#define  DEFAULT_Kd 114  
+
+// RepRapPro Huxley
+  #define  DEFAULT_Kp 21.0
+  #define  DEFAULT_Ki (1.25*PID_dT)
+  #define  DEFAULT_Kd (99/PID_dT)
+
+
 
 // Makergear
 //    #define  DEFAULT_Kp 7.0
@@ -148,7 +156,7 @@
 // If this is enabled, find your own PID constants below.
 //#define PIDTEMPBED
 //
-//#define BED_LIMIT_SWITCHING
+#define BED_LIMIT_SWITCHING
 
 // This sets the max power delived to the bed, and replaces the HEATER_BED_DUTY_CYCLE_DIVIDER option.
 // all forms of bed control obey this (PID, bang-bang, bang-bang with hysteresis)
@@ -213,10 +221,9 @@
 #endif
 
 // The pullups are needed if you directly connect a mechanical endswitch between the signal and ground pins.
-const bool X_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. 
-const bool Y_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. 
-const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of the endstops. 
-//#define DISABLE_MAX_ENDSTOPS
+const bool X_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. 
+const bool Y_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. 
+const bool Z_ENDSTOPS_INVERTING = false; // set to true to invert the logic of the endstops. 
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
 #define X_ENABLE_ON 0
@@ -227,15 +234,15 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 // Disables axis when it's not being used.
 #define DISABLE_X false
 #define DISABLE_Y false
-#define DISABLE_Z false
+#define DISABLE_Z true
 #define DISABLE_E false // For all extruders
 
 #define INVERT_X_DIR true    // for Mendel set to false, for Orca set to true
 #define INVERT_Y_DIR false    // for Mendel set to true, for Orca set to false
-#define INVERT_Z_DIR true     // for Mendel set to false, for Orca set to true
-#define INVERT_E0_DIR false   // for direct drive extruder v9 set to true, for geared extruder set to false
-#define INVERT_E1_DIR false    // for direct drive extruder v9 set to true, for geared extruder set to false
-#define INVERT_E2_DIR false   // for direct drive extruder v9 set to true, for geared extruder set to false
+#define INVERT_Z_DIR false     // for Mendel set to false, for Orca set to true
+#define INVERT_E0_DIR true   // for direct drive extruder v9 set to true, for geared extruder set to false
+#define INVERT_E1_DIR true    // for direct drive extruder v9 set to true, for geared extruder set to false
+#define INVERT_E2_DIR true   // for direct drive extruder v9 set to true, for geared extruder set to false
 
 // ENDSTOP SETTINGS:
 // Sets direction of endstops when homing; 1=MAX, -1=MIN
@@ -268,16 +275,16 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 
 //// MOVEMENT SETTINGS
 #define NUM_AXIS 4 // The axis order in all axis related arrays is X, Y, Z, E
-#define HOMING_FEEDRATE {50*60, 50*60, 4*60, 0}  // set the homing speeds (mm/min)
+#define HOMING_FEEDRATE {50*60, 50*60, 3*60, 0}  // set the homing speeds (mm/min)
 
 // default settings 
 
-#define DEFAULT_AXIS_STEPS_PER_UNIT   {78.7402,78.7402,200*8/3,760*1.1}  // default steps per unit for ultimaker 
-#define DEFAULT_MAX_FEEDRATE          {500, 500, 5, 45}    // (mm/sec)    
-#define DEFAULT_MAX_ACCELERATION      {9000,9000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {91.4286, 91.4286,4000,875}             // default steps per unit for ultimaker 
+#define DEFAULT_MAX_FEEDRATE          {500, 500, 4, 45}    // (mm/sec)    
+#define DEFAULT_MAX_ACCELERATION      {1500,1500,50,250}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
 
-#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E max acceleration in mm/s^2 for printing moves 
-#define DEFAULT_RETRACT_ACCELERATION  3000   // X, Y, Z and E max acceleration in mm/s^2 for r retracts
+#define DEFAULT_ACCELERATION          1500    // X, Y, Z and E max acceleration in mm/s^2 for printing moves 
+#define DEFAULT_RETRACT_ACCELERATION  1500   // X, Y, Z and E max acceleration in mm/s^2 for r retracts
 
 // 
 #define DEFAULT_XYJERK                20.0    // (mm/sec)
