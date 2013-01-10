@@ -461,9 +461,11 @@ void check_axes_activity()
   {
     #if FAN_PIN > -1
     #ifndef FAN_SOFT_PWM
+	#ifndef FAN_PWM_TIMER2
     if (fanSpeed != 0){
       analogWrite(FAN_PIN,fanSpeed); // If buffer is empty use current fan speed
     }
+    #endif
     #endif
 	#endif
   }
@@ -478,6 +480,7 @@ void check_axes_activity()
   }
 #if FAN_PIN > -1
   #ifndef FAN_SOFT_PWM
+  #ifndef FAN_PWM_TIMER2
   if((fanSpeed == 0) && (fan_speed ==0))
   {
     analogWrite(FAN_PIN, 0);
@@ -487,6 +490,7 @@ void check_axes_activity()
   {
     analogWrite(FAN_PIN,tail_fan_speed);
   }
+  #endif
   #endif
 #endif
 #ifdef AUTOTEMP
